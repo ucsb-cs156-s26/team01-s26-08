@@ -15,7 +15,7 @@ TODO: Fill in this table with correct information.
 
 | Table                     | Name         | Github Id |
 |---------------------------|--------------|-----------|
-| UCSBDiningCommonsMenuItem |              |           |
+| UCSBDiningCommonsMenuItem | Wendy        |  CMWENDY  |
 | UCSBOrganization          |              |           |
 | RecommendationRequest     |              |           |
 | MenuItemReview            |              |           |
