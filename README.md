@@ -17,7 +17,7 @@ TODO: Fill in this table with correct information.
 |---------------------------|--------------|-----------|
 | UCSBDiningCommonsMenuItem | Wendy        |  CMWENDY  |
 | UCSBOrganization          | Matthew      |matthewli10|
-| RecommendationRequest     |              |           |
+| RecommendationRequest     | Ria          |riasingh455|
 | MenuItemReview            |              |           |
 | HelpRequest               |              |           |
 | Articles                  |              |           |
