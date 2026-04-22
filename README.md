@@ -20,7 +20,7 @@ TODO: Fill in this table with correct information.
 | RecommendationRequest     | Ria          |riasingh455|
 | MenuItemReview            | Anjali       | dev-anj   |
 | HelpRequest               | Christian    |ccabacungan|
-| Articles                  |              |           |
+| Articles                  | Taedon       |taedonreth |
 
 Remember though, that in spite of these initial  assignments, it is still
 a team project.  Please help other team members to finish their work
