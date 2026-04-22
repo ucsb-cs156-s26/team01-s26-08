@@ -19,7 +19,7 @@ TODO: Fill in this table with correct information.
 | UCSBOrganization          | Matthew      |matthewli10|
 | RecommendationRequest     | Ria          |riasingh455|
 | MenuItemReview            | Anjali       | dev-anj   |
-| HelpRequest               |              |           |
+| HelpRequest               | Christian    |ccabacungan|
 | Articles                  |              |           |
 
 Remember though, that in spite of these initial  assignments, it is still
