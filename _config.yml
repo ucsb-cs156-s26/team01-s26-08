@@ -23,4 +23,4 @@ repo_name: "TBD"
 repo: ucsb-cs156-s26/team01-s26-08
 owner: ucsb-cs156-s26
 repo_name: team01-s26-08
-pull_requests: [{"author":{"id":"U_kgDOCVPcVQ","is_bot":false,"login":"matthewli10","name":""},"headRefName":"matthewli-create-db","number":45,"title":"ml - Add UCSBOrganizations table migration","url":"https://github.com/ucsb-cs156-s26/team01-s26-08/pull/45"}]
+pull_requests: [{"author":{"id":"U_kgDODgRftg","is_bot":false,"login":"CMWENDY","name":"Wendy Contreras"},"headRefName":"wc-UCSBDiningCommonsMenuItem-getbyid","number":46,"title":"Add GET by id endpoint for UCSBDiningCommonsMenuItem","url":"https://github.com/ucsb-cs156-s26/team01-s26-08/pull/46"}]
