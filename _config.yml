@@ -23,4 +23,4 @@ repo_name: "TBD"
 repo: ucsb-cs156-s26/team01-s26-08
 owner: ucsb-cs156-s26
 repo_name: team01-s26-08
-pull_requests: [{"author":{"id":"U_kgDOCVPcVQ","is_bot":false,"login":"matthewli10","name":""},"headRefName":"matthewli-get-endpoint","number":52,"title":"ML - create GET endpoint for single record in UCSBOrganization","url":"https://github.com/ucsb-cs156-s26/team01-s26-08/pull/52"},{"author":{"id":"U_kgDOCWXSsA","is_bot":false,"login":"ccabacungan","name":""},"headRefName":"cc-HelpRequest-controller","number":51,"title":"Create HelpRequest controller","url":"https://github.com/ucsb-cs156-s26/team01-s26-08/pull/51"}]
+pull_requests: [{"author":{"id":"U_kgDOCVPcVQ","is_bot":false,"login":"matthewli10","name":""},"headRefName":"matthewli-get-endpoint","number":52,"title":"ML - create GET endpoint for single record in UCSBOrganization","url":"https://github.com/ucsb-cs156-s26/team01-s26-08/pull/52"}]
