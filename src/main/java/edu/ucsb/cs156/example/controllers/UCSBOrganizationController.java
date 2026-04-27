@@ -36,8 +36,25 @@ public class UCSBOrganizationController extends ApiController {
   public Iterable<UCSBOrganization> allUCSBOrganizations() {
     return ucsbOrganizationRepository.findAll();
   }
-
+  
   /**
+   * Get a single UCSBOrganization by id
+   *
+   * @param id organization code (primary key)
+   * @return the UCSBOrganization with the given id
+   */
+  @Operation(summary = "Get a single ucsb organization")
+  @PreAuthorize("hasRole('ROLE_USER')")
+  @GetMapping("")
+  public UCSBOrganization getById(@Parameter(name = "id") @RequestParam(name = "id") String id) {
+    UCSBOrganization org =
+        ucsbOrganizationRepository
+            .findById(id)
+            .orElseThrow(() -> new EntityNotFoundException(UCSBOrganization.class, id));
+    return org;
+  }
+
+     /**
    * Delete a UCSBOrganization. Accessible only to users with the role "ROLE_ADMIN".
    *
    * @param id organization code (primary key)
@@ -48,11 +65,8 @@ public class UCSBOrganizationController extends ApiController {
   @DeleteMapping("")
   public Object deleteUCSBOrganization(
       @Parameter(name = "id") @RequestParam(name = "id") String id) {
-    UCSBOrganization org =
-        ucsbOrganizationRepository
-            .findById(id)
-            .orElseThrow(() -> new EntityNotFoundException(UCSBOrganization.class, id));
-
+    UCSBOrganization org = ucsbOrganizationRepository.findById(id)
+        .orElseThrow(() -> new EntityNotFoundException(UCSBOrganization.class, id));
     ucsbOrganizationRepository.delete(org);
     return genericMessage("UCSBOrganization with id %s deleted".formatted(id));
   }
