@@ -36,8 +36,25 @@ import org.springframework.web.bind.annotation.RestController;
   public Iterable&lt;UCSBOrganization&gt; allUCSBOrganizations() {
 <span class="fc" id="L37">    return ucsbOrganizationRepository.findAll();</span>
   }
-
+  
   /**
+   * Get a single UCSBOrganization by id
+   *
+   * @param id organization code (primary key)
+   * @return the UCSBOrganization with the given id
+   */
+  @Operation(summary = &quot;Get a single ucsb organization&quot;)
+  @PreAuthorize(&quot;hasRole('ROLE_USER')&quot;)
+  @GetMapping(&quot;&quot;)
+  public UCSBOrganization getById(@Parameter(name = &quot;id&quot;) @RequestParam(name = &quot;id&quot;) String id) {
+<span class="fc" id="L50">    UCSBOrganization org =</span>
+        ucsbOrganizationRepository
+<span class="fc" id="L52">            .findById(id)</span>
+<span class="fc" id="L53">            .orElseThrow(() -&gt; new EntityNotFoundException(UCSBOrganization.class, id));</span>
+<span class="fc" id="L54">    return org;</span>
+  }
+
+     /**
    * Delete a UCSBOrganization. Accessible only to users with the role &quot;ROLE_ADMIN&quot;.
    *
    * @param id organization code (primary key)
@@ -48,13 +65,10 @@ import org.springframework.web.bind.annotation.RestController;
   @DeleteMapping(&quot;&quot;)
   public Object deleteUCSBOrganization(
       @Parameter(name = &quot;id&quot;) @RequestParam(name = &quot;id&quot;) String id) {
-<span class="fc" id="L51">    UCSBOrganization org =</span>
-        ucsbOrganizationRepository
-<span class="fc" id="L53">            .findById(id)</span>
-<span class="fc" id="L54">            .orElseThrow(() -&gt; new EntityNotFoundException(UCSBOrganization.class, id));</span>
-
-<span class="fc" id="L56">    ucsbOrganizationRepository.delete(org);</span>
-<span class="fc" id="L57">    return genericMessage(&quot;UCSBOrganization with id %s deleted&quot;.formatted(id));</span>
+<span class="fc" id="L68">    UCSBOrganization org = ucsbOrganizationRepository.findById(id)</span>
+<span class="fc" id="L69">        .orElseThrow(() -&gt; new EntityNotFoundException(UCSBOrganization.class, id));</span>
+<span class="fc" id="L70">    ucsbOrganizationRepository.delete(org);</span>
+<span class="fc" id="L71">    return genericMessage(&quot;UCSBOrganization with id %s deleted&quot;.formatted(id));</span>
   }
 
   /**
@@ -75,13 +89,13 @@ import org.springframework.web.bind.annotation.RestController;
       @Parameter(name = &quot;orgTranslation&quot;) @RequestParam String orgTranslation,
       @Parameter(name = &quot;inactive&quot;) @RequestParam boolean inactive) {
 
-<span class="fc" id="L78">    UCSBOrganization org = new UCSBOrganization();</span>
-<span class="fc" id="L79">    org.setOrgCode(orgCode);</span>
-<span class="fc" id="L80">    org.setOrgTranslationShort(orgTranslationShort);</span>
-<span class="fc" id="L81">    org.setOrgTranslation(orgTranslation);</span>
-<span class="fc" id="L82">    org.setInactive(inactive);</span>
+<span class="fc" id="L92">    UCSBOrganization org = new UCSBOrganization();</span>
+<span class="fc" id="L93">    org.setOrgCode(orgCode);</span>
+<span class="fc" id="L94">    org.setOrgTranslationShort(orgTranslationShort);</span>
+<span class="fc" id="L95">    org.setOrgTranslation(orgTranslation);</span>
+<span class="fc" id="L96">    org.setInactive(inactive);</span>
 
-<span class="fc" id="L84">    return ucsbOrganizationRepository.save(org);</span>
+<span class="fc" id="L98">    return ucsbOrganizationRepository.save(org);</span>
   }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
