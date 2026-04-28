@@ -50,7 +50,7 @@ public class UCSBOrganizationControllerTests extends ControllerTestCase {
   public void logged_in_users_can_get_all() throws Exception {
     mockMvc.perform(get("/api/UCSBOrganization/all")).andExpect(status().is(200));
   }
-  
+
   @Test
   public void logged_out_users_cannot_put() throws Exception {
     mockMvc
@@ -75,7 +75,7 @@ public class UCSBOrganizationControllerTests extends ControllerTestCase {
   public void logged_out_users_cannot_get_by_id() throws Exception {
     mockMvc.perform(get("/api/UCSBOrganization").param("id", "ZPRC")).andExpect(status().is(403));
   }
-  
+
   @Test
   public void logged_out_users_cannot_post() throws Exception {
     mockMvc
@@ -239,7 +239,7 @@ public class UCSBOrganizationControllerTests extends ControllerTestCase {
     String responseString = response.getResponse().getContentAsString();
     assertEquals(expectedJson, responseString);
   }
-  
+
   @WithMockUser(roles = {"ADMIN", "USER"})
   @Test
   public void admin_can_edit_an_existing_ucsb_organization() throws Exception {
@@ -367,3 +367,4 @@ public class UCSBOrganizationControllerTests extends ControllerTestCase {
     Map<String, Object> json = responseToJson(response);
     assertEquals("UCSBOrganization with id NOPE not found", json.get("message"));
   }
+}

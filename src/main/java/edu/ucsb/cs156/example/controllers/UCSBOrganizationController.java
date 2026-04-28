@@ -40,7 +40,6 @@ public class UCSBOrganizationController extends ApiController {
     return ucsbOrganizationRepository.findAll();
   }
 
-
   /**
    * Update a single UCSBOrganization. Accessible only to users with the role "ROLE_ADMIN".
    *
@@ -104,8 +103,8 @@ public class UCSBOrganizationController extends ApiController {
     ucsbOrganizationRepository.delete(org);
     return genericMessage("UCSBOrganization with id %s deleted".formatted(id));
   }
-  
-  
+
+  /**
    * Create a new UCSBOrganization
    *
    * @param orgCode organization code (primary key)
