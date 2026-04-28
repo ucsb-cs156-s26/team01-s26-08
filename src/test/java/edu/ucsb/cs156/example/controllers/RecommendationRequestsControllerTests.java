@@ -55,29 +55,33 @@ public class RecommendationRequestsControllerTests extends ControllerTestCase {
 
   @Test
   public void logged_out_users_cannot_post() throws Exception {
-    mockMvc.perform(
-        post("/api/recommendationrequests/post")
-            .param("requesterEmail", "student@ucsb.edu")
-            .param("professorEmail", "professor@ucsb.edu")
-            .param("explanation", "Please write me a recommendation.")
-            .param("dateRequested", "2026-04-28T00:00:00")
-            .param("dateNeeded", "2026-05-10T00:00:00")
-            .param("done", "false")
-            .with(csrf()));
+    mockMvc
+        .perform(
+            post("/api/recommendationrequests/post")
+                .param("requesterEmail", "student@ucsb.edu")
+                .param("professorEmail", "professor@ucsb.edu")
+                .param("explanation", "Please write me a recommendation.")
+                .param("dateRequested", "2026-04-28T00:00:00")
+                .param("dateNeeded", "2026-05-10T00:00:00")
+                .param("done", "false")
+                .with(csrf()))
+        .andExpect(status().isForbidden());
   }
 
   @WithMockUser(roles = {"USER"})
   @Test
   public void logged_in_regular_users_cannot_post() throws Exception {
-    mockMvc.perform(
-        post("/api/recommendationrequests/post")
-            .param("requesterEmail", "student@ucsb.edu")
-            .param("professorEmail", "professor@ucsb.edu")
-            .param("explanation", "Please write me a recommendation.")
-            .param("dateRequested", "2026-04-28T00:00:00")
-            .param("dateNeeded", "2026-05-10T00:00:00")
-            .param("done", "false")
-            .with(csrf()));
+    mockMvc
+        .perform(
+            post("/api/recommendationrequests/post")
+                .param("requesterEmail", "student@ucsb.edu")
+                .param("professorEmail", "professor@ucsb.edu")
+                .param("explanation", "Please write me a recommendation.")
+                .param("dateRequested", "2026-04-28T00:00:00")
+                .param("dateNeeded", "2026-05-10T00:00:00")
+                .param("done", "false")
+                .with(csrf()))
+        .andExpect(status().isForbidden());
   }
 
   @WithMockUser(roles = {"USER"})
