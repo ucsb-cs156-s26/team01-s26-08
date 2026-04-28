@@ -55,7 +55,7 @@ public class UCSBOrganizationControllerTests extends ControllerTestCase {
         .perform(delete("/api/UCSBOrganization").param("id", "ZPRC").with(csrf()))
         .andExpect(status().is(403));
   }
-  
+
   @Test
   public void logged_out_users_cannot_get_by_id() throws Exception {
     mockMvc.perform(get("/api/UCSBOrganization").param("id", "ZPRC")).andExpect(status().is(403));
