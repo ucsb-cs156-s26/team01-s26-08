@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,8 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = &quot;UCSBOrganization&quot;)
 @RequestMapping(&quot;/api/UCSBOrganization&quot;)
 @RestController
-<span class="fc" id="L22">@Slf4j</span>
-<span class="fc" id="L23">public class UCSBOrganizationController extends ApiController {</span>
+<span class="fc" id="L23">@Slf4j</span>
+<span class="fc" id="L24">public class UCSBOrganizationController extends ApiController {</span>
 
   @Autowired UCSBOrganizationRepository ucsbOrganizationRepository;
 
@@ -33,7 +34,7 @@ import org.springframework.web.bind.annotation.RestController;
   @PreAuthorize(&quot;hasRole('ROLE_USER')&quot;)
   @GetMapping(&quot;/all&quot;)
   public Iterable&lt;UCSBOrganization&gt; allUCSBOrganizations() {
-<span class="fc" id="L36">    return ucsbOrganizationRepository.findAll();</span>
+<span class="fc" id="L37">    return ucsbOrganizationRepository.findAll();</span>
   }
 
   /**
@@ -46,12 +47,30 @@ import org.springframework.web.bind.annotation.RestController;
   @PreAuthorize(&quot;hasRole('ROLE_USER')&quot;)
   @GetMapping(&quot;&quot;)
   public UCSBOrganization getById(@Parameter(name = &quot;id&quot;) @RequestParam(name = &quot;id&quot;) String id) {
-<span class="fc" id="L49">    UCSBOrganization org =</span>
+<span class="fc" id="L50">    UCSBOrganization org =</span>
         ucsbOrganizationRepository
-<span class="fc" id="L51">            .findById(id)</span>
-<span class="fc" id="L52">            .orElseThrow(() -&gt; new EntityNotFoundException(UCSBOrganization.class, id));</span>
-
+<span class="fc" id="L52">            .findById(id)</span>
+<span class="fc" id="L53">            .orElseThrow(() -&gt; new EntityNotFoundException(UCSBOrganization.class, id));</span>
 <span class="fc" id="L54">    return org;</span>
+  }
+
+  /**
+   * Delete a UCSBOrganization. Accessible only to users with the role &quot;ROLE_ADMIN&quot;.
+   *
+   * @param id organization code (primary key)
+   * @return a message indicating the organization was deleted
+   */
+  @Operation(summary = &quot;Delete a UCSBOrganization&quot;)
+  @PreAuthorize(&quot;hasRole('ROLE_ADMIN')&quot;)
+  @DeleteMapping(&quot;&quot;)
+  public Object deleteUCSBOrganization(
+      @Parameter(name = &quot;id&quot;) @RequestParam(name = &quot;id&quot;) String id) {
+<span class="fc" id="L68">    UCSBOrganization org =</span>
+        ucsbOrganizationRepository
+<span class="fc" id="L70">            .findById(id)</span>
+<span class="fc" id="L71">            .orElseThrow(() -&gt; new EntityNotFoundException(UCSBOrganization.class, id));</span>
+<span class="fc" id="L72">    ucsbOrganizationRepository.delete(org);</span>
+<span class="fc" id="L73">    return genericMessage(&quot;UCSBOrganization with id %s deleted&quot;.formatted(id));</span>
   }
 
   /**
@@ -72,13 +91,13 @@ import org.springframework.web.bind.annotation.RestController;
       @Parameter(name = &quot;orgTranslation&quot;) @RequestParam String orgTranslation,
       @Parameter(name = &quot;inactive&quot;) @RequestParam boolean inactive) {
 
-<span class="fc" id="L75">    UCSBOrganization org = new UCSBOrganization();</span>
-<span class="fc" id="L76">    org.setOrgCode(orgCode);</span>
-<span class="fc" id="L77">    org.setOrgTranslationShort(orgTranslationShort);</span>
-<span class="fc" id="L78">    org.setOrgTranslation(orgTranslation);</span>
-<span class="fc" id="L79">    org.setInactive(inactive);</span>
+<span class="fc" id="L94">    UCSBOrganization org = new UCSBOrganization();</span>
+<span class="fc" id="L95">    org.setOrgCode(orgCode);</span>
+<span class="fc" id="L96">    org.setOrgTranslationShort(orgTranslationShort);</span>
+<span class="fc" id="L97">    org.setOrgTranslation(orgTranslation);</span>
+<span class="fc" id="L98">    org.setInactive(inactive);</span>
 
-<span class="fc" id="L81">    return ucsbOrganizationRepository.save(org);</span>
+<span class="fc" id="L100">    return ucsbOrganizationRepository.save(org);</span>
   }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
