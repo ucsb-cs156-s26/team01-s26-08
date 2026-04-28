@@ -2,7 +2,7 @@
     "databaseChangeLog": [
       {
         "changeSet": {
-          "id": "RecommendationRequest-1",
+          "id": "RecommendationRequest-2",
           "author": "riasingh455",
           "preConditions": [
             {
