@@ -6,6 +6,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -114,6 +115,23 @@ public class HelpRequestControllerTests extends ControllerTestCase {
                 .characterEncoding("utf-8")
                 .content("{}")
                 .with(csrf()))
+        .andExpect(status().is(403));
+  }
+
+  // Authorization tests for /api/HelpRequest DELETE
+
+  @Test
+  public void logged_out_users_cannot_delete() throws Exception {
+    mockMvc
+        .perform(delete("/api/HelpRequest").param("id", "7").with(csrf()))
+        .andExpect(status().is(403));
+  }
+
+  @WithMockUser(roles = {"USER"})
+  @Test
+  public void logged_in_regular_users_cannot_delete() throws Exception {
+    mockMvc
+        .perform(delete("/api/HelpRequest").param("id", "7").with(csrf()))
         .andExpect(status().is(403));
   }
 
@@ -353,6 +371,60 @@ public class HelpRequestControllerTests extends ControllerTestCase {
                     .characterEncoding("utf-8")
                     .content(requestBody)
                     .with(csrf()))
+            .andExpect(status().isNotFound())
+            .andReturn();
+
+    // assert
+    verify(helpRequestRepository, times(1)).findById(eq(7L));
+    Map<String, Object> json = responseToJson(response);
+    assertEquals("EntityNotFoundException", json.get("type"));
+    assertEquals("HelpRequest with id 7 not found", json.get("message"));
+  }
+
+  @WithMockUser(roles = {"ADMIN", "USER"})
+  @Test
+  public void admin_can_delete_an_existing_help_request() throws Exception {
+    // arrange
+    LocalDateTime requestTime = LocalDateTime.parse("2026-04-25T16:00:00");
+
+    HelpRequest helpRequest =
+        HelpRequest.builder()
+            .id(7L)
+            .requesterEmail("student1@ucsb.edu")
+            .teamId("team01")
+            .tableOrBreakoutRoom("4")
+            .requestTime(requestTime)
+            .explanation("Need help with Dokku")
+            .solved(false)
+            .build();
+
+    when(helpRequestRepository.findById(eq(7L))).thenReturn(Optional.of(helpRequest));
+
+    // act
+    MvcResult response =
+        mockMvc
+            .perform(delete("/api/HelpRequest").param("id", "7").with(csrf()))
+            .andExpect(status().isOk())
+            .andReturn();
+
+    // assert
+    verify(helpRequestRepository, times(1)).findById(eq(7L));
+    verify(helpRequestRepository, times(1)).delete(helpRequest);
+    Map<String, Object> json = responseToJson(response);
+    assertEquals("HelpRequest with id 7 deleted", json.get("message"));
+  }
+
+  @WithMockUser(roles = {"ADMIN", "USER"})
+  @Test
+  public void admin_tries_to_delete_non_existent_help_request_and_gets_right_error_message()
+      throws Exception {
+    // arrange
+    when(helpRequestRepository.findById(eq(7L))).thenReturn(Optional.empty());
+
+    // act
+    MvcResult response =
+        mockMvc
+            .perform(delete("/api/HelpRequest").param("id", "7").with(csrf()))
             .andExpect(status().isNotFound())
             .andReturn();
 
