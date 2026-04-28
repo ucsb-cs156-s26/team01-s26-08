@@ -23,4 +23,4 @@ repo_name: "TBD"
 repo: ucsb-cs156-s26/team01-s26-08
 owner: ucsb-cs156-s26
 repo_name: team01-s26-08
-pull_requests: [{"author":{"id":"U_kgDOCWXSsA","is_bot":false,"login":"ccabacungan","name":""},"headRefName":"cc-HelpRequest-delete","number":60,"title":"Add HelpRequest delete endpoint","url":"https://github.com/ucsb-cs156-s26/team01-s26-08/pull/60"}]
+pull_requests: [{"author":{"id":"U_kgDOCVHSBA","is_bot":false,"login":"dev-anj","name":"Anjali Dev"},"headRefName":"menuitemreview-put","number":61,"title":"Menuitemreview PUT","url":"https://github.com/ucsb-cs156-s26/team01-s26-08/pull/61"},{"author":{"id":"U_kgDOCWXSsA","is_bot":false,"login":"ccabacungan","name":""},"headRefName":"cc-HelpRequest-delete","number":60,"title":"Add HelpRequest delete endpoint","url":"https://github.com/ucsb-cs156-s26/team01-s26-08/pull/60"}]
