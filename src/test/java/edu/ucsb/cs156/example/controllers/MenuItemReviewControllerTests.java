@@ -246,9 +246,21 @@ public class MenuItemReviewControllerTests extends ControllerTestCase {
 
     // assert
     verify(menuItemReviewRepository, times(1)).findById(67L);
-    verify(menuItemReviewRepository, times(1)).save(editedmenuItemReview1);
+    verify(menuItemReviewRepository, times(1)).save(menuItemReview1);
     String responseString = response.getResponse().getContentAsString();
-    assertEquals(requestBody, responseString);
+
+    // mutate the original object to match expected final state
+    menuItemReview1.setItemId(21L);
+    menuItemReview1.setReviewerEmail("cgaucho@ucsb.edu");
+    menuItemReview1.setStars(5);
+    menuItemReview1.setDateReviewed(ldt2);
+    menuItemReview1.setComments("#ew");
+
+    // convert to expected JSON
+    String expectedJson = mapper.writeValueAsString(menuItemReview1);
+
+    // assert
+    assertEquals(expectedJson, responseString);
   }
 
   @WithMockUser(roles = {"ADMIN", "USER"})
