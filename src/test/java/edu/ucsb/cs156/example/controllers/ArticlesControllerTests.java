@@ -8,6 +8,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import edu.ucsb.cs156.example.ControllerTestCase;
@@ -23,6 +24,7 @@ import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MvcResult;
@@ -233,5 +235,157 @@ public class ArticlesControllerTests extends ControllerTestCase {
     Map<String, Object> json = responseToJson(response);
     assertEquals("EntityNotFoundException", json.get("type"));
     assertEquals("Articles with id 7 not found", json.get("message"));
+  }
+
+  // Tests for PUT /api/Articles?id=...
+
+  @WithMockUser(roles = {"ADMIN", "USER"})
+  @Test
+  public void admin_can_edit_an_existing_article() throws Exception {
+    // arrange
+    LocalDateTime ldt1 = LocalDateTime.parse("2022-04-20T00:00:00");
+    LocalDateTime ldt2 = LocalDateTime.parse("2023-01-15T12:30:00");
+
+    Articles originalArticle =
+        Articles.builder()
+            .id(67L)
+            .title("Using testing-playground with React Testing Library")
+            .url(
+                "https://dev.to/katieraby/using-testing-playground-with-react-testing-library-26j7")
+            .explanation("Helpful when we get to front end development")
+            .email("phtcon@ucsb.edu")
+            .dateAdded(ldt1)
+            .build();
+
+    Articles editedArticle =
+        Articles.builder()
+            .id(67L)
+            .title("Handy Spring Utility Classes")
+            .url(
+                "https://twitter.com/maciejwalkowiak/status/1511736828369719300?t=gh3gS4ZbXf4ZjazoLLqHFA&s=19")
+            .explanation("A lot of really useful classes are built into Spring")
+            .email("phill@ucsb.edu")
+            .dateAdded(ldt2)
+            .build();
+
+    String requestBody = mapper.writeValueAsString(editedArticle);
+
+    when(articlesRepository.findById(eq(67L))).thenReturn(Optional.of(originalArticle));
+
+    // act
+    MvcResult response =
+        mockMvc
+            .perform(
+                put("/api/Articles")
+                    .param("id", "67")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .characterEncoding("utf-8")
+                    .content(requestBody)
+                    .with(csrf()))
+            .andExpect(status().isOk())
+            .andReturn();
+
+    // assert
+    verify(articlesRepository, times(1)).findById(eq(67L));
+    verify(articlesRepository, times(1)).save(editedArticle);
+    String responseString = response.getResponse().getContentAsString();
+    assertEquals(requestBody, responseString);
+  }
+
+  @WithMockUser(roles = {"ADMIN", "USER"})
+  @Test
+  public void admin_cannot_edit_article_that_does_not_exist() throws Exception {
+    // arrange
+    LocalDateTime ldt = LocalDateTime.parse("2023-01-15T12:30:00");
+
+    Articles editedArticle =
+        Articles.builder()
+            .id(67L)
+            .title("Handy Spring Utility Classes")
+            .url(
+                "https://twitter.com/maciejwalkowiak/status/1511736828369719300?t=gh3gS4ZbXf4ZjazoLLqHFA&s=19")
+            .explanation("A lot of really useful classes are built into Spring")
+            .email("phill@ucsb.edu")
+            .dateAdded(ldt)
+            .build();
+
+    String requestBody = mapper.writeValueAsString(editedArticle);
+
+    when(articlesRepository.findById(eq(67L))).thenReturn(Optional.empty());
+
+    // act
+    MvcResult response =
+        mockMvc
+            .perform(
+                put("/api/Articles")
+                    .param("id", "67")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .characterEncoding("utf-8")
+                    .content(requestBody)
+                    .with(csrf()))
+            .andExpect(status().isNotFound())
+            .andReturn();
+
+    // assert
+    verify(articlesRepository, times(1)).findById(eq(67L));
+    Map<String, Object> json = responseToJson(response);
+    assertEquals("Articles with id 67 not found", json.get("message"));
+  }
+
+  @Test
+  public void logged_out_users_cannot_put() throws Exception {
+    LocalDateTime ldt = LocalDateTime.parse("2023-01-15T12:30:00");
+
+    Articles editedArticle =
+        Articles.builder()
+            .id(67L)
+            .title("Handy Spring Utility Classes")
+            .url(
+                "https://twitter.com/maciejwalkowiak/status/1511736828369719300?t=gh3gS4ZbXf4ZjazoLLqHFA&s=19")
+            .explanation("A lot of really useful classes are built into Spring")
+            .email("phill@ucsb.edu")
+            .dateAdded(ldt)
+            .build();
+
+    String requestBody = mapper.writeValueAsString(editedArticle);
+
+    mockMvc
+        .perform(
+            put("/api/Articles")
+                .param("id", "67")
+                .contentType(MediaType.APPLICATION_JSON)
+                .characterEncoding("utf-8")
+                .content(requestBody)
+                .with(csrf()))
+        .andExpect(status().is(403));
+  }
+
+  @WithMockUser(roles = {"USER"})
+  @Test
+  public void logged_in_regular_users_cannot_put() throws Exception {
+    LocalDateTime ldt = LocalDateTime.parse("2023-01-15T12:30:00");
+
+    Articles editedArticle =
+        Articles.builder()
+            .id(67L)
+            .title("Handy Spring Utility Classes")
+            .url(
+                "https://twitter.com/maciejwalkowiak/status/1511736828369719300?t=gh3gS4ZbXf4ZjazoLLqHFA&s=19")
+            .explanation("A lot of really useful classes are built into Spring")
+            .email("phill@ucsb.edu")
+            .dateAdded(ldt)
+            .build();
+
+    String requestBody = mapper.writeValueAsString(editedArticle);
+
+    mockMvc
+        .perform(
+            put("/api/Articles")
+                .param("id", "67")
+                .contentType(MediaType.APPLICATION_JSON)
+                .characterEncoding("utf-8")
+                .content(requestBody)
+                .with(csrf()))
+        .andExpect(status().is(403));
   }
 }
